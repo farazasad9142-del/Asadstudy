@@ -37,7 +37,6 @@
     html { overflow-x: hidden; }
     body { background: linear-gradient(180deg, var(--primary-soft) 0, var(--bg) 240px); color: var(--text); min-height: 100vh; overflow-x: hidden; transition: background 0.2s, color 0.2s; padding-bottom: 90px; }
     
-    /* Layout */
     header { background: linear-gradient(135deg, var(--primary-deep), var(--primary)); color: white; border-bottom: 1px solid rgba(255, 255, 255, 0.24); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 8px 24px -16px rgba(15, 55, 120, 0.75); }
     header h1 { font-size: clamp(1.35rem, 4vw, 2rem); letter-spacing: -0.03em; line-height: 1.05; }
     header .btn-secondary { color: white; border-color: rgba(255, 255, 255, 0.42); background: rgba(255, 255, 255, 0.1); }
@@ -47,7 +46,6 @@
     .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
     .card { min-width: 0; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; box-shadow: var(--shadow); }
     
-    /* Utilities */
     .btn { background: var(--primary); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; font-weight: 600; transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease; }
     .btn:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 8px 18px -10px rgba(37, 99, 235, 0.9); }
     .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--text); }
@@ -57,17 +55,14 @@
     .badge-warning { background: #fef3c7; color: #92400e; }
     .badge-danger { background: #fee2e2; color: #991b1b; }
     
-    /* Modals & Switcher */
     .modal { position: fixed; inset: 0; background: rgba(3, 15, 36, 0.72); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
     .modal-card { width: min(100%, 480px); position: relative; max-height: 90vh; overflow-y: auto; }
     .welcome-mark { width: 58px; height: 58px; display: grid; place-items: center; margin: 0 auto 1rem; border-radius: 18px; color: white; background: linear-gradient(145deg, var(--primary-deep), var(--primary)); font-size: 1.65rem; font-weight: 800; }
     .hidden { display: none !important; }
     
-    /* Progress Ring */
     .progress-bar { width: 100%; height: 10px; background: var(--border); border-radius: 5px; overflow: hidden; margin: 0.5rem 0; }
     .progress-fill { height: 100%; background: var(--primary); transition: width 0.3s; }
 
-    /* Chapter Accordion & Checklist */
     .chapter-card { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 1rem; padding: 1rem; background: var(--card); }
     .chapter-heading { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; }
     .chapter-heading > div { min-width: 0; overflow-wrap: anywhere; flex: 1; }
@@ -92,7 +87,6 @@
 
     .exam-panel { border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; margin-bottom: 1.2rem; background: var(--card); }
 
-    /* Bottom Navigation Bar */
     .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card); border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 0.5rem 0; z-index: 1000; box-shadow: 0 -4px 12px rgba(0,0,0,0.05); }
     .nav-item { background: transparent; border: none; display: flex; flex-direction: column; align-items: center; color: var(--muted); cursor: pointer; font-size: 0.8rem; font-weight: 600; transition: color 0.2s ease; }
     .nav-item:hover, .nav-item.active { color: var(--primary); }
@@ -231,7 +225,7 @@
           <h3>🎯 Monthly Target</h3>
           <input id="extraMonthlyTarget" type="number" min="1" placeholder="Chapters this month">
           <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-            <button class="extra-btn" id="saveExtraMonthlyTarget" style="flex: 1; margin-top: 0;">Save Target</button>
+            <button class="extra-btn" id="saveExtraMonthlyTarget" style="flex: 1; margin-top: 0;" onclick="saveMonthlyTargetVal()">Save Target</button>
             <button class="extra-btn danger" id="resetExtraMonthlyTarget" style="margin-top: 0;" onclick="resetMonthlyTarget()">Reset</button>
           </div>
           <div class="extra-count">
@@ -247,7 +241,7 @@
           <input id="mockTestName" placeholder="Test name">
           <input id="mockTestMarks" type="number" placeholder="Marks obtained">
           <input id="mockTestTotal" type="number" placeholder="Total marks">
-          <button class="extra-btn" id="addMockTest">Add Test</button>
+          <button class="extra-btn" id="addMockTest" onclick="addMockTest()">Add Test</button>
           <div id="mockTestList" class="extra-list"></div>
         </div>
       </div>
@@ -278,7 +272,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.2rem;">
           <div>
             <h2>📝 Exams & Syllabus Checklist</h2>
-            <p style="color: var(--muted); font-size: 0.9rem;">Manage target exam dates and review subject chapter completion[cite: 3].</p>
+            <p style="color: var(--muted); font-size: 0.9rem;">Manage target exam dates and review subject chapter completion.</p>
           </div>
           <button class="btn" onclick="openExamModal()">+ Add New Exam Plan</button>
         </div>
@@ -311,7 +305,7 @@
           </div>
           <div class="extra-feature-card">
             <h3>⭐ Important Chapters</h3>
-            <p>Mark chapters as important from the chapter tracker.</p>
+            <p>Fully completed chapters tracked from your syllabus progress.</p>
             <div id="importantChapterList" class="extra-list"></div>
           </div>
         </div>
@@ -328,12 +322,12 @@
           <button class="btn btn-secondary" onclick="toggleTheme()">🌙 Toggle Theme</button>
           <div style="border-top: 1px solid var(--border); padding-top: 1rem; margin-top: 0.5rem;">
             <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">📤 Progress Backup</h3>
-            <button class="extra-btn" id="extraExport" style="margin-top: 0; width: 100%;">Export Progress</button>
+            <button class="extra-btn" id="extraExport" style="margin-top: 0; width: 100%;" onclick="exportData()">Export Progress</button>
           </div>
           <div style="border-top: 1px solid var(--border); padding-top: 1rem;">
             <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">📥 Restore Progress</h3>
             <input id="extraImport" type="file" accept=".json">
-            <button class="extra-btn" id="extraImportBtn" style="width: 100%; margin-top: 0.5rem;">Import Progress</button>
+            <button class="extra-btn" id="extraImportBtn" style="width: 100%; margin-top: 0.5rem;" onclick="importData()">Import Progress</button>
           </div>
           <div style="border-top: 1px solid var(--border); padding-top: 1rem;">
             <button class="btn btn-danger" style="width: 100%;" onclick="resetData()">⚠️ Reset All Data</button>
@@ -348,7 +342,7 @@
   <div id="examModal" class="modal hidden" role="dialog" aria-modal="true">
     <div class="card modal-card">
       <h3>Add Personalized Exam Plan</h3>
-      <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 1rem;">Setup target dates and select syllabus chapters for focused tracking[cite: 3].</p>
+      <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 1rem;">Setup target dates and select syllabus chapters for focused tracking.</p>
 
       <label style="font-weight: 700; font-size: 0.85rem;">Exam Title</label>
       <input type="text" id="modalExamTitle" placeholder="e.g., Mid-Term Assessment">
@@ -450,7 +444,9 @@
       dailyGoal: "",
       todos: [],
       weeklyXP: 0,
-      exams: []
+      exams: [],
+      monthlyTarget: 10,
+      mockTests: []
     };
 
     const VISITOR_NAME_KEY = "cbse_visitor_name";
@@ -486,6 +482,8 @@
         todos: [],
         weeklyXP: 0,
         exams: [],
+        monthlyTarget: 10,
+        mockTests: [],
         ...getDefaultCountdownDates()
       };
     }
@@ -495,7 +493,13 @@
       if (saved) {
         try {
           const parsedState = JSON.parse(saved);
-          state = { ...createDefaultState(), ...parsedState, exams: parsedState.exams || [] };
+          state = { 
+            ...createDefaultState(), 
+            ...parsedState, 
+            exams: parsedState.exams || [],
+            mockTests: parsedState.mockTests || [],
+            monthlyTarget: parsedState.monthlyTarget || 10
+          };
         } catch (error) {
           state = createDefaultState();
         }
@@ -553,6 +557,7 @@
       const revFilter = document.getElementById("revisionFilter").value;
       const searchQuery = document.getElementById("searchInput").value.toLowerCase();
       
+      if (!container) return;
       container.innerHTML = "";
       const subjects = SYLLABUS_DATA[currentClass];
 
@@ -626,11 +631,11 @@
 
       if (!wasChecked) { addXP(10); checkStreak(); } else { addXP(-10); }
       saveState();
-      if (window.cbseExtra) window.cbseExtra.render();
     }
 
     function renderSubjectProgress() {
       const container = document.getElementById("subjectProgressContainer");
+      if (!container) return;
       container.innerHTML = "";
       const subjects = SYLLABUS_DATA[currentClass];
 
@@ -653,6 +658,115 @@
           </div>
         `;
       });
+    }
+
+    /* Extra Features Logic: Monthly Target & Mock Tests */
+    function saveMonthlyTargetVal() {
+      const val = parseInt(document.getElementById("extraMonthlyTarget").value);
+      if (isNaN(val) || val < 1) {
+        alert("Please enter a valid positive target number.");
+        return;
+      }
+      state.monthlyTarget = val;
+      saveState();
+    }
+
+    function resetMonthlyTarget() {
+      state.monthlyTarget = 10;
+      document.getElementById("extraMonthlyTarget").value = "";
+      saveState();
+    }
+
+    function addMockTest() {
+      const name = document.getElementById("mockTestName").value.trim();
+      const marks = parseFloat(document.getElementById("mockTestMarks").value);
+      const total = parseFloat(document.getElementById("mockTestTotal").value);
+
+      if (!name || isNaN(marks) || isNaN(total) || total <= 0) {
+        alert("Please fill in valid test details and proper totals.");
+        return;
+      }
+
+      state.mockTests.push({ id: Date.now(), name, marks, total });
+      document.getElementById("mockTestName").value = "";
+      document.getElementById("mockTestMarks").value = "";
+      document.getElementById("mockTestTotal").value = "";
+      saveState();
+    }
+
+    function deleteMockTest(id) {
+      state.mockTests = state.mockTests.filter(t => t.id !== id);
+      saveState();
+    }
+
+    function renderExtraFeatures() {
+      // Monthly target computation (fully completed chapters count as 1)
+      let fullyCompletedCount = 0;
+      const subjects = SYLLABUS_DATA[currentClass];
+      Object.keys(subjects).forEach(sub => {
+        subjects[sub].forEach(ch => {
+          const chId = `${sub}_${ch}`.replace(/\s+/g, '_');
+          if (state.progress[chId] && state.progress[chId].checklist && state.progress[chId].checklist.every(Boolean)) {
+            fullyCompletedCount++;
+          }
+        });
+      });
+
+      const monthlyTotal = state.monthlyTarget || 10;
+      const monthlyDone = Math.min(fullyCompletedCount, monthlyTotal);
+      const monthlyPct = Math.min(100, Math.round((monthlyDone / monthlyTotal) * 100));
+
+      const monthlyTargetInput = document.getElementById("extraMonthlyTarget");
+      if (monthlyTargetInput && document.activeElement !== monthlyTargetInput) {
+        monthlyTargetInput.value = monthlyTotal;
+      }
+      document.getElementById("extraMonthlyDone").innerText = monthlyDone;
+      document.getElementById("extraMonthlyTotal").innerText = monthlyTotal;
+      document.getElementById("extraMonthlyBar").style.width = `${monthlyPct}%`;
+
+      // Mock Test List Rendering
+      const mockListContainer = document.getElementById("mockTestList");
+      if (mockListContainer) {
+        mockListContainer.innerHTML = "";
+        if (!state.mockTests || state.mockTests.length === 0) {
+          mockListContainer.innerHTML = "<p style='color: var(--muted); font-size: 0.85rem;'>No mock tests recorded yet.</p>";
+        } else {
+          state.mockTests.forEach(test => {
+            const percentage = Math.round((test.marks / test.total) * 100);
+            mockListContainer.innerHTML += `
+              <div class="extra-list-item">
+                <div>
+                  <strong>${escapeHtml(test.name)}</strong><br>
+                  <small style="color: var(--muted);">${test.marks} / ${test.total} (${percentage}%)</small>
+                </div>
+                <button class="btn btn-danger" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;" onclick="deleteMockTest(${test.id})">Delete</button>
+              </div>
+            `;
+          });
+        }
+      }
+
+      // Insights Tab Counters
+      document.getElementById("extraStreak").innerText = state.streak || 0;
+      document.getElementById("extraXP").innerText = state.xp || 0;
+      document.getElementById("extraLevel").innerText = Math.floor((state.xp || 0) / 100) + 1;
+      const xpProgress = (state.xp || 0) % 100;
+      document.getElementById("extraXPBar").style.width = `${xpProgress}%`;
+
+      const importantList = document.getElementById("importantChapterList");
+      if (importantList) {
+        importantList.innerHTML = "";
+        let completedListHTML = "";
+        Object.keys(subjects).forEach(sub => {
+          subjects[sub].forEach(ch => {
+            const chId = `${sub}_${ch}`.replace(/\s+/g, '_');
+            if (state.progress[chId] && state.progress[chId].checklist && state.progress[chId].checklist.every(Boolean)) {
+              completedListHTML += `<div class="extra-list-item"><span>${escapeHtml(ch)}</span><span class="badge badge-success">Done</span></div>`;
+            }
+          });
+        });
+        importantList.innerHTML = completedListHTML || "<p style='color: var(--muted); font-size: 0.85rem;'>Complete full chapters to see them listed here.</p>";
+      }
     }
 
     /* Exam Plan Modal Functions */
@@ -723,7 +837,7 @@
       container.innerHTML = "";
 
       if (!state.exams || state.exams.length === 0) {
-        container.innerHTML = "<p style='color: var(--muted); text-align: center; padding: 2rem;'>No custom exams added yet. Click '+ Add New Exam Plan' to begin[cite: 3].</p>";
+        container.innerHTML = "<p style='color: var(--muted); text-align: center; padding: 2rem;'>No custom exams added yet. Click '+ Add New Exam Plan' to begin.</p>";
         return;
       }
 
@@ -788,7 +902,8 @@
     function updateTimerDisplay() {
       const m = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
       const s = (timerSeconds % 60).toString().padStart(2, '0');
-      document.getElementById("timerDisplay").innerText = `${m}:${s}`;
+      const el = document.getElementById("timerDisplay");
+      if (el) el.innerText = `${m}:${s}`;
     }
 
     function startTimer() {
@@ -859,12 +974,18 @@
     function renderCountdowns() {
       const syllabusCD = getCountdownText(state.syllabusDate);
       const examCD = getCountdownText(state.examDate);
-      document.getElementById("syllabusDateInput").value = state.syllabusDate || "";
-      document.getElementById("examDateInput").value = state.examDate || "";
-      document.getElementById("syllabusCD").innerText = syllabusCD.value;
-      document.getElementById("examCD").innerText = examCD.value;
-      document.getElementById("syllabusDateLabel").innerText = syllabusCD.label;
-      document.getElementById("examDateLabel").innerText = examCD.label;
+      const sInput = document.getElementById("syllabusDateInput");
+      const eInput = document.getElementById("examDateInput");
+      if (sInput) sInput.value = state.syllabusDate || "";
+      if (eInput) eInput.value = state.examDate || "";
+      const sCD = document.getElementById("syllabusCD");
+      const eCD = document.getElementById("examCD");
+      if (sCD) sCD.innerText = syllabusCD.value;
+      if (eCD) eCD.innerText = examCD.value;
+      const sLbl = document.getElementById("syllabusDateLabel");
+      const eLbl = document.getElementById("examDateLabel");
+      if (sLbl) sLbl.innerText = syllabusCD.label;
+      if (eLbl) eLbl.innerText = examCD.label;
     }
 
     function saveCountdownDates() {
@@ -874,11 +995,16 @@
     }
 
     function updateUI() {
-      document.getElementById("currentClassBadge").innerText = `Class ${currentClass}`;
-      document.getElementById("streakVal").innerText = `${state.streak || 0} Days`;
-      document.getElementById("xpVal").innerText = `${state.xp || 0} XP`;
-      document.getElementById("weeklyScore").innerText = `Weekly Points: ${state.weeklyXP || 0}`;
-      document.getElementById("dailyGoalDisplay").innerText = state.dailyGoal ? `Goal: ${state.dailyGoal}` : "";
+      const badge = document.getElementById("currentClassBadge");
+      if (badge) badge.innerText = `Class ${currentClass}`;
+      const streakVal = document.getElementById("streakVal");
+      if (streakVal) streakVal.innerText = `${state.streak || 0} Days`;
+      const xpVal = document.getElementById("xpVal");
+      if (xpVal) xpVal.innerText = `${state.xp || 0} XP`;
+      const weeklyScore = document.getElementById("weeklyScore");
+      if (weeklyScore) weeklyScore.innerText = `Weekly Points: ${state.weeklyXP || 0}`;
+      const goalDisplay = document.getElementById("dailyGoalDisplay");
+      if (goalDisplay) goalDisplay.innerText = state.dailyGoal ? `Goal: ${state.dailyGoal}` : "";
 
       const subjects = SYLLABUS_DATA[currentClass];
       let totalTasks = 0, doneTasks = 0;
@@ -893,35 +1019,70 @@
       });
 
       const overallPct = Math.round((doneTasks / totalTasks) * 100) || 0;
-      document.getElementById("overallVal").innerText = `${overallPct}%`;
-      document.getElementById("overallBar").style.width = `${overallPct}%`;
+      const ovVal = document.getElementById("overallVal");
+      if (ovVal) ovVal.innerText = `${overallPct}%`;
+      const ovBar = document.getElementById("overallBar");
+      if (ovBar) ovBar.style.width = `${overallPct}%`;
 
       const todoList = document.getElementById("todoList");
-      todoList.innerHTML = "";
-      (state.todos || []).forEach((todo, idx) => {
-        todoList.innerHTML += `
-          <li>
-            <input type="checkbox" ${todo.done ? "checked" : ""} onchange="toggleTodo(${idx})">
-            <span style="${todo.done ? 'text-decoration: line-through; color: var(--muted);' : ''}">${todo.text}</span>
-          </li>
-        `;
-      });
+      if (todoList) {
+        todoList.innerHTML = "";
+        (state.todos || []).forEach((todo, idx) => {
+          todoList.innerHTML += `
+            <li>
+              <input type="checkbox" ${todo.done ? "checked" : ""} onchange="toggleTodo(${idx})">
+              <span style="${todo.done ? 'text-decoration: line-through; color: var(--muted);' : ''}">${todo.text}</span>
+            </li>
+          `;
+        });
+      }
 
       renderCountdowns();
       renderExamsTabContent();
-      if (window.cbseExtra) window.cbseExtra.render();
+      renderExtraFeatures();
+      renderSyllabus();
+    }
+
+    function exportData() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `asad_cbse_tracker_backup_class_${currentClass}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    function importData() {
+      const fileInput = document.getElementById("extraImport");
+      if (!fileInput.files || fileInput.files.length === 0) {
+        alert("Please select a JSON backup file first.");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const imported = JSON.parse(e.target.result);
+          state = { ...createDefaultState(), ...imported };
+          saveState();
+          alert("Progress restored successfully!");
+        } catch (err) {
+          alert("Invalid backup file format.");
+        }
+      };
+      reader.readAsText(fileInput.files[0]);
     }
 
     function toggleTheme() {
       document.body.classList.toggle("dark");
-      document.getElementById("themeBtn").innerText = document.body.classList.contains("dark") ? "☀️" : "🌙";
+      const btn = document.getElementById("themeBtn");
+      if (btn) btn.innerText = document.body.classList.contains("dark") ? "☀️" : "🌙";
     }
 
     function resetData() {
       if (confirm(`Reset all stored data for Class ${currentClass}?`)) {
         localStorage.removeItem(getStorageKey());
         loadState();
-        renderSyllabus();
         updateUI();
       }
     }
@@ -933,7 +1094,6 @@
     window.onload = () => {
       loadState();
       initSubjectFilter();
-      renderSyllabus();
       updateUI();
       updateVisitorGreeting();
       if (!localStorage.getItem(VISITOR_NAME_KEY)) openNameModal();
