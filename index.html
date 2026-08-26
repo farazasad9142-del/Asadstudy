@@ -103,6 +103,8 @@
     .extra-list { margin-top: 0.7rem; }
     .extra-list-item { display: flex; justify-content: space-between; gap: 10px; align-items: center; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
 
+
+    /* === 10 ADVANCED FEATURES === */
     .advanced-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1rem; margin-top:1rem; }
     .feature-panel { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:1.2rem; box-shadow:var(--shadow); }
     .feature-panel h3 { margin-bottom:.65rem; }
@@ -121,17 +123,67 @@
     .note-card { border:1px solid var(--border); border-radius:9px; padding:.7rem; margin-top:.55rem; }
     .score-inputs { display:grid; grid-template-columns:repeat(3,1fr); gap:.5rem; }
     .reminder-box { padding:.7rem; border-radius:9px; background:var(--bg); border:1px solid var(--border); margin-top:.6rem; }
-
     @media (max-width:600px) {
       .score-inputs { grid-template-columns:1fr; }
     }
+
     @media (max-width: 768px) {
       .container { margin: 1rem auto; padding: 0 0.75rem; }
       .grid { grid-template-columns: minmax(0, 1fr); gap: 1rem; margin-bottom: 1rem; }
       .countdown-card { grid-column: auto; }
       .countdown-grid { grid-template-columns: 1fr; }
     }
-  </style>
+  
+    /* =========================================================
+       MOBILE STABILITY FIX — PRESERVES EXISTING THEME/UI
+       ========================================================= */
+    html, body { width:100%; max-width:100%; overflow-x:hidden; }
+    img, svg, video, iframe { max-width:100%; }
+    .container, .grid, .card, .chapter-card, .extra-feature-card, .exam-panel { min-width:0; max-width:100%; }
+    .chapter-card { overflow:hidden; }
+    .chapter-heading { align-items:flex-start; }
+    .chapter-title-wrap { min-width:0; overflow-wrap:anywhere; word-break:break-word; }
+    .chapter-actions { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:.45rem; }
+    .chapter-actions .btn { flex:0 1 auto; }
+    .chapter-notes textarea { min-height:110px; resize:vertical; }
+    input, select, textarea, button { max-width:100%; }
+
+    @media (max-width: 768px) {
+      body { padding-bottom:calc(78px + env(safe-area-inset-bottom)); }
+      header { padding:.8rem .75rem; gap:.7rem; align-items:flex-start; }
+      header > div:first-child { min-width:0; flex:1; }
+      header h1 { font-size:clamp(1.05rem,5vw,1.45rem); }
+      .header-identity { gap:.35rem .5rem; }
+      .header-actions { flex:0 0 auto; gap:.35rem; }
+      .header-actions .btn { padding:.5rem .65rem; font-size:.78rem; }
+      .container { width:100%; margin:1rem auto; padding:0 .65rem; }
+      .grid { grid-template-columns:minmax(0,1fr) !important; gap:.9rem; }
+      .card { padding:1rem; border-radius:12px; }
+      .chapter-card { padding:.85rem; }
+      .chapter-heading { flex-direction:column; }
+      .chapter-actions { width:100%; justify-content:flex-start; }
+      .chapter-actions .btn { flex:1 1 145px; min-width:0; }
+      .chapter-title-wrap { width:100%; }
+      .checklist { padding-left:0; }
+      .checklist label { align-items:flex-start; line-height:1.35; }
+      .checklist input { flex:0 0 auto; margin-top:.2rem; }
+      .score-inputs { grid-template-columns:1fr !important; }
+      .bottom-nav { padding:6px 3px calc(6px + env(safe-area-inset-bottom)); }
+      .nav-item { min-width:0; flex:1; font-size:.68rem; padding:3px 2px; }
+      .nav-icon { font-size:1.15rem; }
+      .tab-content { width:100%; min-width:0; }
+      table { display:block; width:100%; overflow-x:auto; }
+    }
+
+    @media (max-width: 420px) {
+      .container { padding:0 .5rem; }
+      header { padding:.7rem .55rem; }
+      .header-actions .btn-danger { display:none; }
+      .chapter-actions .btn { flex:1 1 100%; width:100%; }
+      .bottom-nav .nav-item { font-size:.6rem; }
+      .nav-icon { font-size:1.05rem; }
+    }
+</style>
 </head>
 <body>
 
@@ -334,6 +386,7 @@
       </section>
     </div>
 
+
     <!-- TAB 5: ADVANCED FEATURES -->
     <div id="tab-advanced" class="tab-content">
       <div class="card">
@@ -341,11 +394,13 @@
         <p style="color:var(--muted);margin:.5rem 0 1rem;">Your 10 new study tools in one place.</p>
 
         <div class="advanced-grid">
+          <!-- 1 Achievements -->
           <div class="feature-panel">
             <h3>🏆 Achievements & Badges</h3>
             <div id="badgesContainer"></div>
           </div>
 
+          <!-- 2 Analytics -->
           <div class="feature-panel">
             <h3>📈 Study Analytics</h3>
             <div class="mini-grid">
@@ -359,6 +414,7 @@
             </div>
           </div>
 
+          <!-- 3 Marks Calculator -->
           <div class="feature-panel">
             <h3>📝 Marks & Percentage Calculator</h3>
             <div class="score-inputs">
@@ -375,18 +431,21 @@
             <p id="marksResult" style="margin-top:.6rem;font-weight:700;color:var(--primary);"></p>
           </div>
 
+          <!-- 4 Revision Scheduler -->
           <div class="feature-panel">
             <h3>🔄 Revision Scheduler</h3>
             <p style="color:var(--muted);font-size:.85rem;">Chapters with a revision date appear here automatically.</p>
             <div id="revisionSchedule"></div>
           </div>
 
+          <!-- 5 Weak Chapter Detector -->
           <div class="feature-panel">
             <h3>🎯 Weak Chapter Detector</h3>
             <p style="color:var(--muted);font-size:.85rem;">Find chapters with incomplete checklist work.</p>
             <div id="weakChapterList"></div>
           </div>
 
+          <!-- 6 PYQ Tracker -->
           <div class="feature-panel">
             <h3>📚 PYQ Progress Tracker</h3>
             <input id="pyqChapter" placeholder="Chapter / topic">
@@ -395,6 +454,7 @@
             <div id="pyqList" class="extra-list"></div>
           </div>
 
+          <!-- 7 Quick Notes -->
           <div class="feature-panel">
             <h3>🧠 Quick Notes</h3>
             <input id="quickNoteTitle" placeholder="Note title">
@@ -403,6 +463,7 @@
             <div id="quickNotesList"></div>
           </div>
 
+          <!-- 8 Reminders -->
           <div class="feature-panel">
             <h3>🔔 Smart Study Reminders</h3>
             <input id="reminderText" placeholder="Reminder, e.g. Revise Physics">
@@ -411,6 +472,7 @@
             <div id="remindersList"></div>
           </div>
 
+          <!-- 9 Daily Challenge -->
           <div class="feature-panel">
             <h3>🏅 Daily Challenge</h3>
             <div class="challenge-box">
@@ -422,6 +484,7 @@
             </div>
           </div>
 
+          <!-- 10 Subject Comparison -->
           <div class="feature-panel">
             <h3>📊 Subject Comparison</h3>
             <div id="subjectComparison"></div>
@@ -558,6 +621,7 @@
     ];
 
     let currentClass = "10";
+    localStorage.setItem("cbse_class", "10");
     let state = {
       progress: {},
       xp: 0,
@@ -648,9 +712,9 @@
       }
     }
 
-    function saveState() {
+    function saveState(shouldUpdateUI = true) {
       localStorage.setItem(getStorageKey(), JSON.stringify(state));
-      updateUI();
+      if (shouldUpdateUI) updateUI();
     }
 
     function switchTab(event, tabId) {
@@ -693,13 +757,22 @@
 
     function renderSyllabus() {
       const container = document.getElementById("chaptersContainer");
-      const subFilter = document.getElementById("subjectFilter").value;
-      const revFilter = document.getElementById("revisionFilter").value;
-      const searchQuery = document.getElementById("searchInput").value.toLowerCase();
-      
-      if (!container) return;
-      container.innerHTML = "";
+      const subjectFilter = document.getElementById("subjectFilter");
+      const revisionFilter = document.getElementById("revisionFilter");
+      const searchInput = document.getElementById("searchInput");
+      if (!container || !subjectFilter || !revisionFilter || !searchInput) return;
+
+      const subFilter = subjectFilter.value;
+      const revFilter = revisionFilter.value;
+      const searchQuery = searchInput.value.trim().toLowerCase();
       const subjects = SYLLABUS_DATA[currentClass];
+
+      // Keep the user's open/closed state across every re-render.
+      const openDetails = state.openDetails || (state.openDetails = {});
+      const openNotes = state.openNotes || (state.openNotes = {});
+      const visibleIds = new Set();
+
+      container.innerHTML = "";
 
       Object.keys(subjects).forEach(subject => {
         if (subFilter !== "all" && subFilter !== subject) return;
@@ -708,49 +781,67 @@
           if (searchQuery && !chapter.toLowerCase().includes(searchQuery)) return;
 
           const chId = `${subject}_${chapter}`.replace(/\s+/g, '_');
-          const chData = state.progress[chId] || { checklist: [false, false, false, false, false], notes: "", lastRevised: null };
+          visibleIds.add(chId);
+          const chData = state.progress[chId] || {
+            checklist: [false, false, false, false, false],
+            notes: "",
+            lastRevised: null
+          };
+          if (!Array.isArray(chData.checklist)) chData.checklist = [false, false, false, false, false];
           const isDue = chData.lastRevised && (Date.now() - chData.lastRevised > 3 * 24 * 60 * 60 * 1000);
           if (revFilter === "due" && !isDue) return;
 
+          const detailsOpen = !!openDetails[chId];
+          const notesOpen = !!openNotes[chId];
           const card = document.createElement("div");
           card.className = "chapter-card";
           card.innerHTML = `
             <div class="chapter-heading">
-              <div>
-                <strong>${chapter}</strong> <small style="color: var(--muted);">(${subject})</small>
+              <div class="chapter-title-wrap">
+                <strong>${escapeHtml(chapter)}</strong>
+                <small style="color: var(--muted);">(${escapeHtml(subject)})</small>
                 ${isDue ? '<span class="badge badge-danger">Revision Due!</span>' : ''}
               </div>
-              <div style="display: flex; gap: 0.5rem;">
-                <button class="btn btn-secondary" onclick="toggleChapterDetails('${chId}')">👁️ Show Details</button>
-                <button class="btn btn-secondary" onclick="toggleNotes('${chId}')">📝 Notes</button>
+              <div class="chapter-actions">
+                <button type="button" class="btn btn-secondary" onclick="toggleChapterDetails('${chId}')">
+                  👁️ ${detailsOpen ? 'Hide Details' : 'Show Details'}
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="toggleNotes('${chId}')">
+                  📝 ${notesOpen ? 'Hide Notes' : 'Notes'}
+                </button>
               </div>
             </div>
-            
-            <div id="details_${chId}" class="checklist hidden">
+
+            <div id="details_${chId}" class="checklist ${detailsOpen ? '' : 'hidden'}">
               ${CHECKLIST_ITEMS.map((item, idx) => `
-                <label style="display: block; margin: 0.3rem 0; cursor: pointer;">
+                <label>
                   <input type="checkbox" ${chData.checklist[idx] ? "checked" : ""} onchange="toggleChecklist('${chId}', ${idx})">
-                  ${item}
+                  <span>${escapeHtml(item)}</span>
                 </label>
               `).join('')}
             </div>
 
-            <div id="notes_${chId}" class="hidden" style="margin-top: 0.5rem;">
-              <textarea placeholder="Write brief revision notes..." onchange="saveNotes('${chId}', this.value)">${chData.notes || ''}</textarea>
+            <div id="notes_${chId}" class="${notesOpen ? '' : 'hidden'} chapter-notes">
+              <textarea placeholder="Write brief revision notes..." oninput="saveNotes('${chId}', this.value)">${escapeHtml(chData.notes || '')}</textarea>
             </div>
           `;
           container.appendChild(card);
         });
       });
+
       renderSubjectProgress();
     }
 
     function toggleChapterDetails(chId) {
-      document.getElementById(`details_${chId}`).classList.toggle("hidden");
+      state.openDetails = state.openDetails || {};
+      state.openDetails[chId] = !state.openDetails[chId];
+      saveState(false);
     }
 
     function toggleNotes(chId) {
-      document.getElementById(`notes_${chId}`).classList.toggle("hidden");
+      state.openNotes = state.openNotes || {};
+      state.openNotes[chId] = !state.openNotes[chId];
+      saveState(false);
     }
 
     function saveNotes(chId, val) {
@@ -800,6 +891,7 @@
       });
     }
 
+    /* Extra Features Logic: Monthly Target & Mock Tests */
     function saveMonthlyTargetVal() {
       const val = parseInt(document.getElementById("extraMonthlyTarget").value);
       if (isNaN(val) || val < 1) {
@@ -839,6 +931,7 @@
     }
 
     function renderExtraFeatures() {
+      // Monthly target computation (fully completed chapters count as 1)
       let fullyCompletedCount = 0;
       const subjects = SYLLABUS_DATA[currentClass];
       Object.keys(subjects).forEach(sub => {
@@ -862,6 +955,7 @@
       document.getElementById("extraMonthlyTotal").innerText = monthlyTotal;
       document.getElementById("extraMonthlyBar").style.width = `${monthlyPct}%`;
 
+      // Mock Test List Rendering
       const mockListContainer = document.getElementById("mockTestList");
       if (mockListContainer) {
         mockListContainer.innerHTML = "";
@@ -883,6 +977,7 @@
         }
       }
 
+      // Insights Tab Counters
       document.getElementById("extraStreak").innerText = state.streak || 0;
       document.getElementById("extraXP").innerText = state.xp || 0;
       document.getElementById("extraLevel").innerText = Math.floor((state.xp || 0) / 100) + 1;
@@ -905,6 +1000,7 @@
       }
     }
 
+    /* Exam Plan Modal Functions */
     function openExamModal() {
       document.getElementById("modalExamTitle").value = "";
       const future = new Date();
@@ -966,7 +1062,6 @@
       }
     }
 
-    /* Fixed rendering function for exams tab content */
     function renderExamsTabContent() {
       const container = document.getElementById("examsTabContainer");
       if (!container) return;
@@ -993,7 +1088,7 @@
         panel.className = "exam-panel";
         panel.innerHTML = `
           <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap;">
-            <div>
+
               <h3>${escapeHtml(exam.title)}</h3>
               <small style="color: var(--muted);">Subject: <strong>${escapeHtml(exam.subject)}</strong> • Target: <strong>${exam.date}</strong> (${daysString})</small>
             </div>
@@ -1179,6 +1274,9 @@
       renderAdvancedFeatures();
       renderSyllabus();
     }
+
+
+    /* === 10 ADVANCED FEATURES LOGIC === */
 
     const DAILY_CHALLENGES = [
       "Complete one full chapter checklist.",
@@ -1439,6 +1537,7 @@
         if (r) r.innerText = `${state.marksData.obtained} / ${state.marksData.total} = ${Number(state.marksData.percentage).toFixed(2)}%`;
       }
     }
+
 
     function exportData() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
