@@ -836,12 +836,14 @@
       state.openDetails = state.openDetails || {};
       state.openDetails[chId] = !state.openDetails[chId];
       saveState(false);
+      renderSyllabus();
     }
 
     function toggleNotes(chId) {
       state.openNotes = state.openNotes || {};
       state.openNotes[chId] = !state.openNotes[chId];
       saveState(false);
+      renderSyllabus();
     }
 
     function saveNotes(chId, val) {
