@@ -103,6 +103,28 @@
     .extra-list { margin-top: 0.7rem; }
     .extra-list-item { display: flex; justify-content: space-between; gap: 10px; align-items: center; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
 
+    .advanced-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1rem; margin-top:1rem; }
+    .feature-panel { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:1.2rem; box-shadow:var(--shadow); }
+    .feature-panel h3 { margin-bottom:.65rem; }
+    .feature-stat { font-size:1.8rem; font-weight:800; color:var(--primary); margin:.3rem 0; }
+    .feature-row { display:flex; justify-content:space-between; gap:.7rem; align-items:center; padding:.55rem 0; border-bottom:1px solid var(--border); }
+    .feature-row:last-child { border-bottom:0; }
+    .mini-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:.65rem; }
+    .mini-box { padding:.75rem; border:1px solid var(--border); border-radius:10px; background:color-mix(in srgb,var(--primary-soft) 40%,var(--card)); }
+    .badge-earned { background:#fef3c7; color:#92400e; border:1px solid #f59e0b; }
+    .badge-locked { background:var(--bg); color:var(--muted); border:1px solid var(--border); }
+    .weak-item { border-left:4px solid var(--danger); padding:.55rem .7rem; margin:.45rem 0; background:color-mix(in srgb,var(--danger) 7%,var(--card)); border-radius:7px; }
+    .revision-item { border-left:4px solid var(--warning); padding:.55rem .7rem; margin:.45rem 0; background:color-mix(in srgb,var(--warning) 7%,var(--card)); border-radius:7px; }
+    .challenge-box { border:1px dashed var(--primary); border-radius:12px; padding:1rem; background:var(--primary-soft); }
+    .analytics-bar { height:10px; border-radius:8px; background:var(--border); overflow:hidden; margin-top:.35rem; }
+    .analytics-fill { height:100%; background:var(--primary); }
+    .note-card { border:1px solid var(--border); border-radius:9px; padding:.7rem; margin-top:.55rem; }
+    .score-inputs { display:grid; grid-template-columns:repeat(3,1fr); gap:.5rem; }
+    .reminder-box { padding:.7rem; border-radius:9px; background:var(--bg); border:1px solid var(--border); margin-top:.6rem; }
+
+    @media (max-width:600px) {
+      .score-inputs { grid-template-columns:1fr; }
+    }
     @media (max-width: 768px) {
       .container { margin: 1rem auto; padding: 0 0.75rem; }
       .grid { grid-template-columns: minmax(0, 1fr); gap: 1rem; margin-bottom: 1rem; }
@@ -312,7 +334,103 @@
       </section>
     </div>
 
-    <!-- TAB 5: SETTINGS -->
+    <!-- TAB 5: ADVANCED FEATURES -->
+    <div id="tab-advanced" class="tab-content">
+      <div class="card">
+        <h2>🚀 Advanced Study Center</h2>
+        <p style="color:var(--muted);margin:.5rem 0 1rem;">Your 10 new study tools in one place.</p>
+
+        <div class="advanced-grid">
+          <div class="feature-panel">
+            <h3>🏆 Achievements & Badges</h3>
+            <div id="badgesContainer"></div>
+          </div>
+
+          <div class="feature-panel">
+            <h3>📈 Study Analytics</h3>
+            <div class="mini-grid">
+              <div class="mini-box"><small>XP</small><div class="feature-stat" id="analyticsXP">0</div></div>
+              <div class="mini-box"><small>Chapters</small><div class="feature-stat" id="analyticsChapters">0</div></div>
+              <div class="mini-box"><small>Tasks</small><div class="feature-stat" id="analyticsTasks">0</div></div>
+            </div>
+            <div style="margin-top:.8rem;">
+              <div class="feature-row"><span>Overall completion</span><strong id="analyticsOverall">0%</strong></div>
+              <div class="analytics-bar"><div id="analyticsOverallBar" class="analytics-fill" style="width:0%"></div></div>
+            </div>
+          </div>
+
+          <div class="feature-panel">
+            <h3>📝 Marks & Percentage Calculator</h3>
+            <div class="score-inputs">
+              <input id="marks1" type="number" min="0" placeholder="Subject 1">
+              <input id="marks2" type="number" min="0" placeholder="Subject 2">
+              <input id="marks3" type="number" min="0" placeholder="Subject 3">
+            </div>
+            <div class="score-inputs" style="margin-top:.5rem;">
+              <input id="marks4" type="number" min="0" placeholder="Subject 4">
+              <input id="marks5" type="number" min="0" placeholder="Subject 5">
+              <input id="totalPerSubject" type="number" min="1" value="100" placeholder="Max per subject">
+            </div>
+            <button class="extra-btn" onclick="calculateMarks()">Calculate</button>
+            <p id="marksResult" style="margin-top:.6rem;font-weight:700;color:var(--primary);"></p>
+          </div>
+
+          <div class="feature-panel">
+            <h3>🔄 Revision Scheduler</h3>
+            <p style="color:var(--muted);font-size:.85rem;">Chapters with a revision date appear here automatically.</p>
+            <div id="revisionSchedule"></div>
+          </div>
+
+          <div class="feature-panel">
+            <h3>🎯 Weak Chapter Detector</h3>
+            <p style="color:var(--muted);font-size:.85rem;">Find chapters with incomplete checklist work.</p>
+            <div id="weakChapterList"></div>
+          </div>
+
+          <div class="feature-panel">
+            <h3>📚 PYQ Progress Tracker</h3>
+            <input id="pyqChapter" placeholder="Chapter / topic">
+            <input id="pyqCount" type="number" min="1" placeholder="PYQs solved">
+            <button class="extra-btn" onclick="addPYQ()">Add PYQ Record</button>
+            <div id="pyqList" class="extra-list"></div>
+          </div>
+
+          <div class="feature-panel">
+            <h3>🧠 Quick Notes</h3>
+            <input id="quickNoteTitle" placeholder="Note title">
+            <textarea id="quickNoteText" placeholder="Important points / formulas / reminders"></textarea>
+            <button class="extra-btn" onclick="addQuickNote()">Save Note</button>
+            <div id="quickNotesList"></div>
+          </div>
+
+          <div class="feature-panel">
+            <h3>🔔 Smart Study Reminders</h3>
+            <input id="reminderText" placeholder="Reminder, e.g. Revise Physics">
+            <input id="reminderDate" type="date">
+            <button class="extra-btn" onclick="addReminder()">Add Reminder</button>
+            <div id="remindersList"></div>
+          </div>
+
+          <div class="feature-panel">
+            <h3>🏅 Daily Challenge</h3>
+            <div class="challenge-box">
+              <strong id="dailyChallengeText">Loading challenge...</strong>
+              <div style="margin-top:.7rem;">
+                <button class="extra-btn" id="challengeBtn" onclick="completeDailyChallenge()">Complete Challenge</button>
+              </div>
+              <p id="challengeStatus" style="margin-top:.5rem;font-size:.85rem;"></p>
+            </div>
+          </div>
+
+          <div class="feature-panel">
+            <h3>📊 Subject Comparison</h3>
+            <div id="subjectComparison"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 6: SETTINGS -->
     <div id="tab-settings" class="tab-content">
       <div class="card">
         <h2>⚙️ Settings & Options</h2>
@@ -390,6 +508,10 @@
       <span class="nav-icon">📊</span>
       <span>Insights</span>
     </button>
+    <button class="nav-item" onclick="switchTab(event, 'tab-advanced')">
+      <span class="nav-icon">🚀</span>
+      <span>Advanced</span>
+    </button>
     <button class="nav-item" onclick="switchTab(event, 'tab-settings')">
       <span class="nav-icon">⚙️</span>
       <span>Settings</span>
@@ -446,7 +568,13 @@
       weeklyXP: 0,
       exams: [],
       monthlyTarget: 10,
-      mockTests: []
+      mockTests: [],
+      pyqs: [],
+      quickNotes: [],
+      reminders: [],
+      challengeDate: null,
+      challengeDone: false,
+      marksData: {}
     };
 
     const VISITOR_NAME_KEY = "cbse_visitor_name";
@@ -484,6 +612,12 @@
         exams: [],
         monthlyTarget: 10,
         mockTests: [],
+        pyqs: [],
+        quickNotes: [],
+        reminders: [],
+        challengeDate: null,
+        challengeDone: false,
+        marksData: {},
         ...getDefaultCountdownDates()
       };
     }
@@ -498,6 +632,12 @@
             ...parsedState, 
             exams: parsedState.exams || [],
             mockTests: parsedState.mockTests || [],
+            pyqs: parsedState.pyqs || [],
+            quickNotes: parsedState.quickNotes || [],
+            reminders: parsedState.reminders || [],
+            challengeDate: parsedState.challengeDate || null,
+            challengeDone: !!parsedState.challengeDone,
+            marksData: parsedState.marksData || {},
             monthlyTarget: parsedState.monthlyTarget || 10
           };
         } catch (error) {
@@ -660,7 +800,6 @@
       });
     }
 
-    /* Extra Features Logic: Monthly Target & Mock Tests */
     function saveMonthlyTargetVal() {
       const val = parseInt(document.getElementById("extraMonthlyTarget").value);
       if (isNaN(val) || val < 1) {
@@ -700,7 +839,6 @@
     }
 
     function renderExtraFeatures() {
-      // Monthly target computation (fully completed chapters count as 1)
       let fullyCompletedCount = 0;
       const subjects = SYLLABUS_DATA[currentClass];
       Object.keys(subjects).forEach(sub => {
@@ -724,7 +862,6 @@
       document.getElementById("extraMonthlyTotal").innerText = monthlyTotal;
       document.getElementById("extraMonthlyBar").style.width = `${monthlyPct}%`;
 
-      // Mock Test List Rendering
       const mockListContainer = document.getElementById("mockTestList");
       if (mockListContainer) {
         mockListContainer.innerHTML = "";
@@ -746,7 +883,6 @@
         }
       }
 
-      // Insights Tab Counters
       document.getElementById("extraStreak").innerText = state.streak || 0;
       document.getElementById("extraXP").innerText = state.xp || 0;
       document.getElementById("extraLevel").innerText = Math.floor((state.xp || 0) / 100) + 1;
@@ -769,7 +905,6 @@
       }
     }
 
-    /* Exam Plan Modal Functions */
     function openExamModal() {
       document.getElementById("modalExamTitle").value = "";
       const future = new Date();
@@ -831,6 +966,7 @@
       }
     }
 
+    /* Fixed rendering function for exams tab content */
     function renderExamsTabContent() {
       const container = document.getElementById("examsTabContainer");
       if (!container) return;
@@ -1040,14 +1176,275 @@
       renderCountdowns();
       renderExamsTabContent();
       renderExtraFeatures();
+      renderAdvancedFeatures();
       renderSyllabus();
+    }
+
+    const DAILY_CHALLENGES = [
+      "Complete one full chapter checklist.",
+      "Solve 10 PYQs from any subject.",
+      "Finish one pending revision.",
+      "Study with Pomodoro for one full session.",
+      "Complete 3 checklist tasks from one chapter.",
+      "Write quick notes for one important chapter.",
+      "Complete one mock test."
+    ];
+
+    function getAllChapters() {
+      const result = [];
+      Object.keys(SYLLABUS_DATA[currentClass]).forEach(subject => {
+        SYLLABUS_DATA[currentClass][subject].forEach(chapter => {
+          const chId = `${subject}_${chapter}`.replace(/\s+/g, '_');
+          const data = state.progress[chId] || { checklist:[false,false,false,false,false], notes:"", lastRevised:null };
+          result.push({ subject, chapter, chId, data });
+        });
+      });
+      return result;
+    }
+
+    function completedChapterCount() {
+      return getAllChapters().filter(x => x.data.checklist && x.data.checklist.every(Boolean)).length;
+    }
+
+    function getTodayKey() {
+      return new Date().toISOString().slice(0,10);
+    }
+
+    function renderBadges() {
+      const totalChapters = getAllChapters().length;
+      const completed = completedChapterCount();
+      const badges = [
+        ["🌱 First Step", completed >= 1, "Complete 1 chapter"],
+        ["⚡ 100 XP", (state.xp || 0) >= 100, "Earn 100 XP"],
+        ["📚 5 Chapters", completed >= 5, "Complete 5 chapters"],
+        ["🔥 7-Day Streak", (state.streak || 0) >= 7, "Reach a 7-day streak"],
+        ["🏆 10 Chapters", completed >= 10, "Complete 10 chapters"],
+        ["💯 100% Checklist", totalChapters > 0 && completed === totalChapters, "Finish every chapter checklist"]
+      ];
+      const el = document.getElementById("badgesContainer");
+      if (!el) return;
+      el.innerHTML = badges.map(b => `
+        <div class="feature-row">
+          <span class="badge ${b[1] ? 'badge-earned' : 'badge-locked'}">${b[0]}</span>
+          <small style="color:var(--muted);text-align:right;">${b[1] ? "Unlocked!" : b[2]}</small>
+        </div>`).join("");
+    }
+
+    function renderAnalytics() {
+      const all = getAllChapters();
+      const totalTasks = all.length * CHECKLIST_ITEMS.length;
+      const doneTasks = all.reduce((sum,x) => sum + (x.data.checklist || []).filter(Boolean).length, 0);
+      const pct = totalTasks ? Math.round(doneTasks / totalTasks * 100) : 0;
+      document.getElementById("analyticsXP").innerText = state.xp || 0;
+      document.getElementById("analyticsChapters").innerText = completedChapterCount();
+      document.getElementById("analyticsTasks").innerText = `${doneTasks}/${totalTasks}`;
+      document.getElementById("analyticsOverall").innerText = `${pct}%`;
+      document.getElementById("analyticsOverallBar").style.width = `${pct}%`;
+    }
+
+    function calculateMarks() {
+      const max = Number(document.getElementById("totalPerSubject").value) || 100;
+      const ids = ["marks1","marks2","marks3","marks4","marks5"];
+      const values = ids.map(id => Number(document.getElementById(id).value)).filter(v => !isNaN(v) && v >= 0);
+      if (!values.length) {
+        document.getElementById("marksResult").innerText = "Enter at least one subject mark.";
+        return;
+      }
+      const obtained = values.reduce((a,b) => a+b, 0);
+      const total = values.length * max;
+      const pct = (obtained / total) * 100;
+      state.marksData = { obtained, total, percentage: Number(pct.toFixed(2)), values, max };
+      saveState();
+      document.getElementById("marksResult").innerText = `${obtained} / ${total} = ${pct.toFixed(2)}%`;
+    }
+
+    function renderRevisionSchedule() {
+      const el = document.getElementById("revisionSchedule");
+      if (!el) return;
+      const items = getAllChapters()
+        .filter(x => x.data.lastRevised)
+        .map(x => {
+          const next = new Date(x.data.lastRevised + 3 * DAY_MS);
+          return {...x, next};
+        })
+        .sort((a,b) => a.next-b.next)
+        .slice(0,8);
+      el.innerHTML = items.length ? items.map(x => `
+        <div class="revision-item">
+          <strong>${escapeHtml(x.chapter)}</strong><br>
+          <small>${escapeHtml(x.subject)} • Next revision: ${x.next.toLocaleDateString()}</small>
+        </div>`).join("") :
+        `<p style="color:var(--muted);font-size:.85rem;">Complete a chapter checklist to start its revision schedule.</p>`;
+    }
+
+    function renderWeakChapters() {
+      const el = document.getElementById("weakChapterList");
+      if (!el) return;
+      const weak = getAllChapters()
+        .map(x => ({...x, done:(x.data.checklist||[]).filter(Boolean).length}))
+        .filter(x => x.done < CHECKLIST_ITEMS.length)
+        .sort((a,b) => a.done-b.done)
+        .slice(0,8);
+      el.innerHTML = weak.length ? weak.map(x => `
+        <div class="weak-item">
+          <strong>${escapeHtml(x.chapter)}</strong>
+          <small style="display:block;color:var(--muted);">${escapeHtml(x.subject)} • ${x.done}/${CHECKLIST_ITEMS.length} tasks done</small>
+        </div>`).join("") :
+        `<p style="color:var(--muted);font-size:.85rem;">No weak chapters detected. Great work!</p>`;
+    }
+
+    function addPYQ() {
+      const chapter = document.getElementById("pyqChapter").value.trim();
+      const count = Number(document.getElementById("pyqCount").value);
+      if (!chapter || !count || count < 1) { alert("Enter a chapter and valid PYQ count."); return; }
+      state.pyqs.push({ id:Date.now(), chapter, count });
+      document.getElementById("pyqChapter").value = "";
+      document.getElementById("pyqCount").value = "";
+      saveState();
+    }
+
+    function deletePYQ(id) {
+      state.pyqs = state.pyqs.filter(x => x.id !== id);
+      saveState();
+    }
+
+    function renderPYQs() {
+      const el = document.getElementById("pyqList");
+      if (!el) return;
+      const total = (state.pyqs || []).reduce((s,x) => s + Number(x.count || 0), 0);
+      el.innerHTML = `<p style="font-weight:700;margin-bottom:.4rem;">Total PYQs solved: ${total}</p>` +
+        ((state.pyqs || []).map(x => `
+          <div class="extra-list-item">
+            <span>${escapeHtml(x.chapter)}<br><small style="color:var(--muted);">${x.count} PYQs</small></span>
+            <button class="btn btn-danger" style="padding:.2rem .5rem;font-size:.75rem;" onclick="deletePYQ(${x.id})">Delete</button>
+          </div>`).join("") || `<p style="color:var(--muted);font-size:.85rem;">No PYQ records yet.</p>`);
+    }
+
+    function addQuickNote() {
+      const title = document.getElementById("quickNoteTitle").value.trim();
+      const text = document.getElementById("quickNoteText").value.trim();
+      if (!title || !text) { alert("Enter both a note title and note text."); return; }
+      state.quickNotes.push({ id:Date.now(), title, text, date:new Date().toLocaleDateString() });
+      document.getElementById("quickNoteTitle").value = "";
+      document.getElementById("quickNoteText").value = "";
+      saveState();
+    }
+
+    function deleteQuickNote(id) {
+      state.quickNotes = state.quickNotes.filter(x => x.id !== id);
+      saveState();
+    }
+
+    function renderQuickNotes() {
+      const el = document.getElementById("quickNotesList");
+      if (!el) return;
+      el.innerHTML = (state.quickNotes || []).slice().reverse().map(x => `
+        <div class="note-card">
+          <div style="display:flex;justify-content:space-between;gap:.5rem;">
+            <strong>${escapeHtml(x.title)}</strong>
+            <button class="btn btn-danger" style="padding:.15rem .45rem;font-size:.7rem;" onclick="deleteQuickNote(${x.id})">Delete</button>
+          </div>
+          <p style="margin-top:.4rem;white-space:pre-wrap;">${escapeHtml(x.text)}</p>
+          <small style="color:var(--muted);">${escapeHtml(x.date)}</small>
+        </div>`).join("") || `<p style="color:var(--muted);font-size:.85rem;margin-top:.6rem;">No quick notes saved.</p>`;
+    }
+
+    function addReminder() {
+      const text = document.getElementById("reminderText").value.trim();
+      const date = document.getElementById("reminderDate").value;
+      if (!text || !date) { alert("Enter a reminder and date."); return; }
+      state.reminders.push({ id:Date.now(), text, date, done:false });
+      document.getElementById("reminderText").value = "";
+      document.getElementById("reminderDate").value = "";
+      saveState();
+    }
+
+    function deleteReminder(id) {
+      state.reminders = state.reminders.filter(x => x.id !== id);
+      saveState();
+    }
+
+    function renderReminders() {
+      const el = document.getElementById("remindersList");
+      if (!el) return;
+      const today = getTodayKey();
+      el.innerHTML = (state.reminders || []).sort((a,b) => a.date.localeCompare(b.date)).map(x => `
+        <div class="reminder-box">
+          <div style="display:flex;justify-content:space-between;gap:.5rem;">
+            <strong>${escapeHtml(x.text)}</strong>
+            <button class="btn btn-danger" style="padding:.15rem .45rem;font-size:.7rem;" onclick="deleteReminder(${x.id})">Delete</button>
+          </div>
+          <small style="color:${x.date <= today ? 'var(--danger)' : 'var(--muted)'};">${escapeHtml(x.date)}${x.date <= today ? " • Due" : ""}</small>
+        </div>`).join("") || `<p style="color:var(--muted);font-size:.85rem;margin-top:.6rem;">No reminders set.</p>`;
+    }
+
+    function ensureDailyChallenge() {
+      const today = getTodayKey();
+      if (state.challengeDate !== today) {
+        const index = Math.floor((new Date(today).getTime() / DAY_MS)) % DAILY_CHALLENGES.length;
+        state.challengeDate = today;
+        state.challengeDone = false;
+        state.challengeText = DAILY_CHALLENGES[index];
+      }
+      const text = document.getElementById("dailyChallengeText");
+      if (text) text.innerText = state.challengeText || DAILY_CHALLENGES[0];
+      const status = document.getElementById("challengeStatus");
+      if (status) status.innerText = state.challengeDone ? "✅ Challenge completed today! +25 XP" : "Complete today's challenge to earn +25 XP.";
+      const btn = document.getElementById("challengeBtn");
+      if (btn) {
+        btn.disabled = !!state.challengeDone;
+        btn.innerText = state.challengeDone ? "Completed" : "Complete Challenge";
+      }
+    }
+
+    function completeDailyChallenge() {
+      ensureDailyChallenge();
+      if (state.challengeDone) return;
+      state.challengeDone = true;
+      addXP(25);
+      checkStreak();
+      saveState();
+    }
+
+    function renderSubjectComparison() {
+      const el = document.getElementById("subjectComparison");
+      if (!el) return;
+      el.innerHTML = Object.keys(SYLLABUS_DATA[currentClass]).map(subject => {
+        const list = SYLLABUS_DATA[currentClass][subject];
+        const done = list.filter(ch => {
+          const id = `${subject}_${ch}`.replace(/\s+/g,'_');
+          return state.progress[id] && state.progress[id].checklist && state.progress[id].checklist.every(Boolean);
+        }).length;
+        const pct = list.length ? Math.round(done/list.length*100) : 0;
+        return `<div style="margin:.7rem 0;">
+          <div class="feature-row"><span>${escapeHtml(subject)}</span><strong>${done}/${list.length} • ${pct}%</strong></div>
+          <div class="analytics-bar"><div class="analytics-fill" style="width:${pct}%"></div></div>
+        </div>`;
+      }).join("");
+    }
+
+    function renderAdvancedFeatures() {
+      renderBadges();
+      renderAnalytics();
+      renderRevisionSchedule();
+      renderWeakChapters();
+      renderPYQs();
+      renderQuickNotes();
+      renderReminders();
+      ensureDailyChallenge();
+      renderSubjectComparison();
+
+      if (state.marksData && state.marksData.obtained !== undefined) {
+        const r = document.getElementById("marksResult");
+        if (r) r.innerText = `${state.marksData.obtained} / ${state.marksData.total} = ${Number(state.marksData.percentage).toFixed(2)}%`;
+      }
     }
 
     function exportData() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
       const downloadAnchor = document.createElement('a');
       downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", `asad_cbse_tracker_backup_class_${currentClass}.json`);
+      downloadAnchor.setAttribute("download", `cbse_tracker_backup_class_${currentClass}.json`);
       document.body.appendChild(downloadAnchor);
       downloadAnchor.click();
       downloadAnchor.remove();
