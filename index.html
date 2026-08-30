@@ -4,6 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#2563eb">
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CBSE Tracker">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Asad CBSE Tracker - Exam & Study Suite</title>
   <style>
     :root {
@@ -694,6 +701,109 @@ textarea:focus {
   }
 }
 
+
+/* =========================================================
+   PWA INSTALL BUTTON — APP-STYLE INSTALL EXPERIENCE
+   ========================================================= */
+.pwa-install-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #7c5cff, #43d9ff);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 12px;
+  padding: .58rem .85rem;
+  cursor: pointer;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 10px 28px rgba(92,76,210,.3);
+  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+.pwa-install-btn.show {
+  display: inline-flex;
+  animation: pwaInstallIn .35s cubic-bezier(.2,.8,.2,1) both;
+}
+.pwa-install-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+  box-shadow: 0 16px 34px rgba(92,76,210,.4);
+}
+.pwa-install-btn:active {
+  transform: scale(.97);
+}
+.pwa-install-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 25%, rgba(255,255,255,.3) 50%, transparent 75%);
+  transform: translateX(-120%);
+  transition: transform .55s ease;
+}
+.pwa-install-btn:hover::before {
+  transform: translateX(120%);
+}
+@keyframes pwaInstallIn {
+  from { opacity: 0; transform: translateY(-5px) scale(.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.pwa-install-card {
+  display: none;
+  margin-bottom: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.pwa-install-card.show {
+  display: flex;
+  animation: pageIn .35s ease both;
+}
+.pwa-install-card-icon {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  font-size: 1.35rem;
+  color: #fff;
+  background: linear-gradient(135deg, #7c5cff, #43d9ff);
+  box-shadow: 0 8px 25px rgba(124,92,255,.3);
+}
+.pwa-install-card-content {
+  min-width: 0;
+  flex: 1;
+}
+.pwa-install-card-content h3 {
+  margin-bottom: .2rem;
+}
+.pwa-install-card-content p {
+  color: var(--muted);
+  font-size: .88rem;
+}
+.pwa-install-card .btn {
+  flex: 0 0 auto;
+}
+.pwa-installed {
+  display: none !important;
+}
+@media (max-width: 600px) {
+  .pwa-install-card {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .pwa-install-card .btn {
+    width: 100%;
+  }
+  .pwa-install-btn {
+    padding: .5rem .62rem;
+    font-size: .76rem;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -721,12 +831,24 @@ textarea:focus {
       </div>
     </div>
     <div class="header-actions">
+      <button class="pwa-install-btn" id="pwaInstallBtn" type="button" onclick="installPWA()" aria-label="Install CBSE Tracker">📲 Install</button>
       <button class="btn btn-secondary" id="themeBtn" onclick="toggleTheme()">🌙</button>
       <button class="btn btn-danger" onclick="resetData()">Reset Data</button>
     </div>
   </header>
 
   <div class="container">
+
+    <!-- PWA Install Card -->
+    <div id="pwaInstallCard" class="card pwa-install-card">
+      <div class="pwa-install-card-icon">📱</div>
+      <div class="pwa-install-card-content">
+        <h3>Install CBSE Tracker</h3>
+        <p>Install this tracker like a real app for faster access and offline support.</p>
+      </div>
+      <button class="btn" type="button" onclick="installPWA()">📲 Install App</button>
+    </div>
+
     
     <!-- TAB 1: HOME -->
     <div id="tab-home" class="tab-content active">
@@ -2108,5 +2230,86 @@ textarea:focus {
       if (!localStorage.getItem(VISITOR_NAME_KEY)) openNameModal();
     };
   </script>
+
+<script>
+  // PWA service worker registration
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js")
+        .catch(err => console.warn("PWA service worker registration failed:", err));
+    });
+  }
+</script>
+
+
+<script>
+  /* =========================================================
+     PWA INSTALL EXPERIENCE
+     ========================================================= */
+  let deferredInstallPrompt = null;
+
+  function isPWAInstalled() {
+    return window.matchMedia("(display-mode: standalone)").matches ||
+           window.navigator.standalone === true;
+  }
+
+  function updatePWAInstallUI() {
+    const installBtn = document.getElementById("pwaInstallBtn");
+    const installCard = document.getElementById("pwaInstallCard");
+
+    if (!installBtn || !installCard) return;
+
+    if (isPWAInstalled()) {
+      installBtn.classList.remove("show");
+      installCard.classList.remove("show");
+      return;
+    }
+
+    if (deferredInstallPrompt) {
+      installBtn.classList.add("show");
+      installCard.classList.add("show");
+    }
+  }
+
+  window.addEventListener("beforeinstallprompt", event => {
+    event.preventDefault();
+    deferredInstallPrompt = event;
+    updatePWAInstallUI();
+  });
+
+  async function installPWA() {
+    if (!deferredInstallPrompt) {
+      // iOS and some browsers do not expose beforeinstallprompt.
+      if (/iphone|ipad|ipod/i.test(navigator.userAgent)) {
+        alert("To install CBSE Tracker on iPhone/iPad: tap Share, then choose “Add to Home Screen”.");
+      } else {
+        alert("If the install button is not available yet, open this site over HTTPS in a supported browser and use the browser's Install App / Add to Home Screen option.");
+      }
+      return;
+    }
+
+    const promptEvent = deferredInstallPrompt;
+    deferredInstallPrompt = null;
+
+    try {
+      await promptEvent.prompt();
+      const result = await promptEvent.userChoice;
+      console.log("PWA install result:", result.outcome);
+    } catch (error) {
+      console.warn("PWA installation was not completed:", error);
+    }
+
+    updatePWAInstallUI();
+  }
+
+  window.addEventListener("appinstalled", () => {
+    deferredInstallPrompt = null;
+    updatePWAInstallUI();
+  });
+
+  window.addEventListener("load", updatePWAInstallUI);
+  window.addEventListener("resize", updatePWAInstallUI);
+</script>
+
 </body>
 </html>
